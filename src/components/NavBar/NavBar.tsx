@@ -29,8 +29,7 @@ const NavBar = () => {
         ...styles.navBarBlock,
         width: isExpanded ? '231px' : '117px',
         padding: isExpanded ? '24px 13px 10px 38px' : '24px 47px 10px 25px',
-      }}
-    >
+      }}>
       <div style={styles.logoContainer}>
         <div style={styles.arrow} onClick={handleToggleExpand}>
           <img src={isExpanded ? hideNavBar : showNavBar} alt="arrow" />
@@ -57,8 +56,7 @@ const NavBar = () => {
             <li
               className={`menuItem ${!isExpanded && 'menuItemShort'} ${
                 location.pathname === '/main' && 'menuItemActive'
-              } `}
-            >
+              } `}>
               {isExpanded ? (
                 <>
                   <img
@@ -87,8 +85,7 @@ const NavBar = () => {
             <li
               className={`menuItem ${!isExpanded && 'menuItemShort'} ${
                 location.pathname === '/active-chats' && 'menuItemActive'
-              } `}
-            >
+              } `}>
               {isExpanded ? (
                 <>
                   <img
@@ -119,8 +116,7 @@ const NavBar = () => {
             <li
               className={`menuItem ${!isExpanded && 'menuItemShort'}   ${
                 location.pathname === '/private-messages' && 'menuItemActive'
-              } `}
-            >
+              } `}>
               {isExpanded ? (
                 <>
                   <img
@@ -151,8 +147,7 @@ const NavBar = () => {
             <li
               className={`menuItem ${!isExpanded && 'menuItemShort'}  ${
                 location.pathname === '/my-created-chats' && 'menuItemActive'
-              } `}
-            >
+              } `}>
               {isExpanded ? (
                 <>
                   <img
@@ -185,8 +180,7 @@ const NavBar = () => {
         <div
           className={`menuItem ${!isExpanded && 'menuItemShort'} ${
             location.pathname === '/setting' && 'menuItemActive'
-          } `}
-        >
+          } `}>
           {isExpanded ? (
             <>
               <img

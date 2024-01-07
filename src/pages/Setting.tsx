@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { RootState } from '../redux/store';
 import { removeUser, setVerified } from '../redux/user/slice';
+import { openNewUserModal } from '../redux/modals/slice';
 
 const Setting = () => {
   const navigate = useNavigate();
@@ -16,6 +17,10 @@ const Setting = () => {
     dispatch(setVerified(false));
     navigate('/');
   };
+  const openModalNewUser = () => {
+    navigate('/main');
+    dispatch(openNewUserModal());
+  };
   return (
     <div
       className="page-container"
@@ -23,6 +28,7 @@ const Setting = () => {
     >
       <h1>Setting</h1>
       <button onClick={() => handleLogOut()}>log out</button>
+      <div onClick={() => openModalNewUser()}>new user modal</div>
     </div>
   );
 };

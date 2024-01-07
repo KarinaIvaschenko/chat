@@ -3,11 +3,13 @@ import { createSlice } from '@reduxjs/toolkit';
 type ModalsItem = {
   welcomeModal: boolean;
   createChatModal: boolean;
+  newUserModal: boolean;
 };
 
 const initialStates: ModalsItem = {
   welcomeModal: false,
   createChatModal: false,
+  newUserModal: false,
 };
 
 const modals = createSlice({
@@ -26,6 +28,12 @@ const modals = createSlice({
     closeCreateChatModal(state) {
       state.createChatModal = false;
     },
+    openNewUserModal(state) {
+      state.newUserModal = true;
+    },
+    closeNewUserModal(state) {
+      state.newUserModal = false;
+    },
   },
 });
 
@@ -34,6 +42,8 @@ export const {
   closeWelcome,
   openCreateChatModal,
   closeCreateChatModal,
+  openNewUserModal,
+  closeNewUserModal,
 } = modals.actions;
 
 export default modals.reducer;

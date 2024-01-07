@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import axios from 'axios';
@@ -6,12 +6,41 @@ import axios from 'axios';
 import { RootState } from '../../../redux/store';
 import { closeCreateChatModal } from '../../../redux/modals/slice';
 import { createChat } from '../../../redux/chat/slice';
-import { setLanguages } from '../../../redux/languages/slice';
+import { setAllChats } from '../../../redux/allChats/allChats';
+import { CgClose } from 'react-icons/cg';
+import './index.css';
+
+import {
+  ENGLISH_FLAG,
+  UKRAINE_FLAG,
+  POLAND_FLAG,
+  FRENCH_FLAG,
+  GERMAN_FLAG,
+} from '../../MainPage/ChatsBlock/index';
+import { tickIcon } from '../../../constants/images';
+
+type FlagType = JSX.Element;
+
+const FLAGS: { [key: string]: FlagType } = {
+  English: ENGLISH_FLAG,
+  Polski: POLAND_FLAG,
+  Français: FRENCH_FLAG,
+  Українська: UKRAINE_FLAG,
+  Deutsch: GERMAN_FLAG,
+};
 
 interface FormData {
   topic: string;
   category: string;
   language: string;
+}
+interface LanguageData {
+  id: string;
+  name: string;
+}
+interface CategoryData {
+  id: string;
+  name: string;
 }
 
 const CreateChatForm: React.FC = () => {
@@ -24,35 +53,24 @@ const CreateChatForm: React.FC = () => {
 
   const [maxCharError, setMaxCharError] = useState(false);
   const [emptyInputError, setEmptyInputError] = useState(false);
+  const [emptyCategoryError, setEmptyCategoryError] = useState(false);
+  const [sameNameError, setSameNameError] = useState(false);
+
+  const [isOpenLang, setIsOpenLang] = useState(false);
+  const [isOpenCategory, setIsOpenCategory] = useState(false);
+
+  const [activeLang, setActiveLang] = useState<LanguageData>({
+    id: languages[0].id,
+    name: languages[0].name,
+  });
+  const [activeCat, setActiveCat] = useState<CategoryData>({
+    id: '',
+    name: '',
+  });
 
   const closeModal = () => {
     dispatch(closeCreateChatModal());
   };
-
-  const [firstCategory, ...onlyCategories] = categories;
-
-  useEffect(() => {
-    const getLanguages = async () => {
-      try {
-        const baseUrl = process.env.REACT_APP_API_URL;
-        const endpoint = 'api/v1/chat-language';
-        const url = `${baseUrl}/${endpoint}`;
-        const headers = {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        };
-
-        const response = await axios.get(url, { headers });
-        const data = response.data.data;
-
-        dispatch(setLanguages(data));
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    getLanguages();
-  }, [dispatch, token]);
 
   const [formData, setFormData] = useState<FormData>({
     topic: '',
@@ -63,7 +81,7 @@ const CreateChatForm: React.FC = () => {
   const handleChange = (
     event: React.ChangeEvent<
       HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement
-    >
+    >,
   ) => {
     const { name, value } = event.target;
 
@@ -80,20 +98,61 @@ const CreateChatForm: React.FC = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const getChats = async () => {
+    try {
+      const baseUrl = process.env.REACT_APP_API_URL;
+      const endpoint = 'api/v1/chat-channel/public';
+      const url = `${baseUrl}/${endpoint}`;
+      const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      };
+
+      const response = await axios.get(url, { headers });
+      const data = response.data.data;
+
+      dispatch(setAllChats(data));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const checkSameName = async () => {
+    try {
+      const baseUrl = process.env.REACT_APP_API_URL;
+      const endpoint = 'api/v1/chat-channel/public';
+      const url = `${baseUrl}/${endpoint}`;
+      const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      };
+
+      const response = await axios.get(url, { headers });
+      const data = response.data.data;
+      const nameArr: any = [];
+      for (let i = 0; i < data.length; i++) {
+        nameArr.push(data[i].name);
+      }
+      if (nameArr.indexOf(formData.topic) !== -1) {
+        setSameNameError(true);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-
+    checkSameName();
     if (formData.topic.trim() === '') {
       setEmptyInputError(true);
-      return;
     }
-
-    const selectedCategory = onlyCategories.find(
-      (category) => category.id === formData.category
-    );
-    const selectedLanguage = languages.find(
-      (language) => language.id === formData.language
-    );
+    if (activeCat.name === '') {
+      setEmptyCategoryError(true);
+    } else {
+      setEmptyCategoryError(false);
+    }
+    if (emptyCategoryError || emptyInputError) return;
 
     try {
       const url = `${process.env.REACT_APP_API_URL}/api/v1/chat-channel/public/new`;
@@ -105,23 +164,21 @@ const CreateChatForm: React.FC = () => {
 
       const requestBody = {
         name: formData.topic,
-        categoryId:
-          formData.category || onlyCategories[onlyCategories.length - 1].id,
-        languageId: formData.language || languages[0].id,
+        categoryId: activeCat.id || categories[categories.length - 1].id,
+        languageId: activeLang.id || languages[0].id,
       };
 
       const response = await axios.post(url, requestBody, { headers });
-
       if (response.status === 200) {
         dispatch(
           createChat({
             topic: formData.topic,
-            category:
-              selectedCategory?.name ||
-              onlyCategories[onlyCategories.length - 1].name,
-            language: selectedLanguage?.name || languages[0].name,
-          })
+            category: activeCat.name || categories[categories.length - 1].name,
+            language: activeLang.name || languages[0].name,
+          }),
         );
+
+        getChats();
 
         setFormData({ topic: '', category: '', language: '' });
         setMaxCharError(false);
@@ -130,7 +187,7 @@ const CreateChatForm: React.FC = () => {
         dispatch(closeCreateChatModal());
       } else if (response.status === 400) {
         console.log(
-          'Failed. Some field of ChatChannelDto don`t fit requirements.'
+          'Failed. Some field of ChatChannelDto don`t fit requirements.',
         );
       } else if (response.status === 404) {
         console.log('Failed. User, ChatCategory, or ChatLanguage not found.');
@@ -154,10 +211,10 @@ const CreateChatForm: React.FC = () => {
           style={styles.input}
           value={formData.topic}
           onChange={handleChange}
+          placeholder="e.g., Burgers Well-Done Is The Way To Go|"
           maxLength={40}
           rows={3}
-          cols={40}
-        ></textarea>
+          cols={40}></textarea>
         {maxCharError && (
           <p style={styles.error}>
             You have reached the maximum number of characters.
@@ -168,40 +225,122 @@ const CreateChatForm: React.FC = () => {
             You cannot create a chat with an empty input.
           </p>
         )}
+        {sameNameError && (
+          <p style={styles.error}>
+            Oops, chat with the same name already exists. Come up with another
+            name.
+          </p>
+        )}
 
         <label style={styles.label} htmlFor="categorySelect">
           Category
         </label>
-        <select
-          id="categorySelect"
-          name="category"
-          value={formData.category}
-          onChange={handleChange}
-          style={styles.select}
-        >
-          {onlyCategories.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.name}
-            </option>
-          ))}
-        </select>
+        <div
+          className={`select custom-dropdown-container-modal category-dropdown`}
+          onClick={() =>
+            setIsOpenCategory((isOpenCategory) => !isOpenCategory)
+          }>
+          <div className={`select custom-dropdown-header-modal`}>
+            <img className="dropdown-icon-modal" alt="" />
+            <span className="dropdown-icon-modal-flag">
+              {activeCat.name ? (
+                activeCat.name
+              ) : (
+                <div className="dorpdown-molad-flag-default">
+                  Choose from the list
+                </div>
+              )}
+            </span>
+            <div className={`dropdown-triangle-modal `} />
+            <button className={`dropdown-close-modal`}>
+              <CgClose color={'#ffffff'} size={10} />
+            </button>
+          </div>
+          {isOpenCategory && (
+            <div className={`custom-dropdown-options-modal category-options`}>
+              {categories.map(
+                ({ id, name }) =>
+                  name !== 'All chats' && (
+                    <div
+                      key={id}
+                      className={`custom-dropdown-option-modal`}
+                      onClick={() => {
+                        setActiveCat({
+                          id,
+                          name,
+                        });
+                      }}>
+                      {formData.language === name && (
+                        <div className="tick">
+                          <img
+                            src={tickIcon}
+                            alt="tick"
+                            className="tick-icon-modal"
+                          />
+                        </div>
+                      )}
+                      {name}
+                    </div>
+                  ),
+              )}
+            </div>
+          )}
+          {emptyCategoryError && !activeCat.name && (
+            <p className="dropdown-category-error">
+              Don't know category? Сhoose “Other” from the list.
+            </p>
+          )}
+        </div>
 
-        <label style={styles.label} htmlFor="languageSelect">
+        <label
+          style={styles.label}
+          htmlFor="languageSelect"
+          className="language-label">
           Language of communication
         </label>
-        <select
-          id="languageSelect"
-          name="language"
-          value={formData.language}
-          onChange={handleChange}
-          style={styles.select}
-        >
-          {languages.map((language) => (
-            <option key={language.id} value={language.id}>
-              {language.name}
-            </option>
-          ))}
-        </select>
+        <div
+          className={`select custom-dropdown-container-modal language-dropdown`}
+          onClick={() => setIsOpenLang((isOpenLang) => !isOpenLang)}>
+          <div className={`select custom-dropdown-header-modal`}>
+            <img className="dropdown-icon-modal" alt="" />
+            <span>
+              <span className="dropdown-icon-modal-flag">
+                {FLAGS[`${activeLang.name}`]}
+              </span>{' '}
+              {activeLang.name}
+            </span>
+            <div className={`dropdown-triangle-modal `} />
+            <button className={`dropdown-close-modal`}>
+              <CgClose color={'#ffffff'} size={10} />
+            </button>
+          </div>
+          {isOpenLang && (
+            <div className={`custom-dropdown-options-modal`}>
+              {languages.map(({ id, name }) => (
+                <div
+                  key={id}
+                  className={`custom-dropdown-option-modal ${
+                    name === activeLang.name ? 'active' : ''
+                  } `}
+                  onClick={() => {
+                    setActiveLang({ id, name });
+                  }}>
+                  {FLAGS[`${name}`]}
+                  {formData.language === name && (
+                    <div className="tick">
+                      <img
+                        src={tickIcon}
+                        alt="tick"
+                        className="tick-icon-modal"
+                      />
+                    </div>
+                  )}
+                  {name}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
         <div style={styles.buttonsContainer}>
           <button style={styles.cancelBtn} onClick={() => closeModal()}>
@@ -237,6 +376,7 @@ const styles = {
   },
   label: {
     fontSize: '14px',
+    cursor: 'auto',
   },
   select: {
     backgroundColor: '#313338',
@@ -246,6 +386,7 @@ const styles = {
     color: '#fff',
     margin: '12px 0 20px',
     fontSize: '14px',
+    cursor: 'pointer',
   },
   buttonsContainer: {
     marginTop: '14px',
@@ -272,8 +413,8 @@ const styles = {
   error: {
     position: 'absolute' as 'absolute',
     top: '96px',
-    color: 'red',
-    fontSize: '11px',
+    color: '#F84848',
+    fontSize: '10px',
     marginBottom: '8px',
   },
 };

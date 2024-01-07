@@ -16,6 +16,10 @@ import hideNavBar from '../assets/images/hide-navbar.svg';
 import showNavBar from '../assets/images/show-navbar.svg';
 import vector from '../assets/images/Vector.svg';
 import notFound from '../assets/images/404.svg';
+import arrowTop from '../assets/images/IconArrowTop.svg';
+import earth from '../assets/images/earth.svg';
+import tickIcon from '../assets/images/tick.svg';
+import earthActive from '../assets/images/earth-active.svg';
 
 export {
   background,
@@ -36,4 +40,8 @@ export {
   showNavBar,
   vector,
   notFound,
+  arrowTop,
+  earth,
+  tickIcon,
+  earthActive,
 };

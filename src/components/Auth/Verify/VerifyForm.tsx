@@ -8,6 +8,7 @@ import axios from 'axios';
 import { RootState } from '../../../redux/store';
 
 import { setVerified } from '../../../redux/user/slice';
+import { openNewUserModal } from '../../../redux/modals/slice';
 
 interface VerifyFormProps {
   setVerifyModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -54,6 +55,7 @@ const VerifyForm: React.FC<VerifyFormProps> = ({
       } else if (response.status === 200) {
         dispatch(setVerified(true));
         setVerifyModal(false);
+        dispatch(openNewUserModal());
       } else {
         throw new Error('Failed to verify');
       }

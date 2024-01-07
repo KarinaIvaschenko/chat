@@ -1,0 +1,32 @@
+.container {
+    margin-top: 12px;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.filterBlock {
+    display: flex;
+    justify-content: flex-start;
+    gap: 6px;
+}
+
+.resetBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #313338;
+    transition: 1s ease;
+}
+
+.resetBtn:hover {
+    background-color: #2C3FE1;
+}
+
+.resetBtn:active {
+    background-color: #2C3FE1;
+
+}

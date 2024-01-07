@@ -43,6 +43,7 @@ body {
   margin: 0;
   font-family: 'KumbhSans', sans-serif;
   font-weight: 400;
+  background-color: #1e1f22;
 }
 
 .modalBlock {
@@ -397,8 +398,7 @@ body {
 
 .page-container {
   background-color: #1e1f22;
-  padding-top: 104px;
-  padding-left: 273px;
+  padding: 104px 0 90px 273px;
 
   /* height: 100vh; */
 }
@@ -423,4 +423,15 @@ body {
   .greet {
     font-size: 2.5em;
   }
+}
+
+.selectForm {
+  background: #313338;
+  border: 1px solid #ffffff;
+  border-radius: 4px;
+  padding: 10px;
+  color: #ffffff;
+  margin: 12px 0 20px;
+  font-size: 14px;
+  cursor: pointer;
 }

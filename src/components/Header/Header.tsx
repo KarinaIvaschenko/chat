@@ -20,6 +20,7 @@ const Header = () => {
     dispatch(openCreateChatModal());
   };
 
+
   return (
     <div style={styles.headerContainer}>
       <header style={styles.header}>
@@ -30,6 +31,7 @@ const Header = () => {
           <div onClick={() => openModalCreateChat()} style={styles.plusCircle}>
             <BsPlusLg width={20} height={20} color="#fff" />
           </div>
+
         </div>
 
         <div style={styles.userInfo}>

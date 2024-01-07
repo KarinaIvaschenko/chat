@@ -1,0 +1,17 @@
+.dropdown-icon-clock {
+  position: absolute;
+  top: 5px;
+  left: 7px;
+}
+
+.custom-dropdown-header-update.open {
+  min-width: 120px;
+  color: #ffffff;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+
+}
+
+.text.active {
+  color: #ffffff;
+}

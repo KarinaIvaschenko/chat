@@ -1,7 +1,6 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../redux/store';
-import { itemsLang } from './constans';
+import { itemsLang, itemsCategories } from './constans';
+import { BsThreeDotsVertical } from 'react-icons/bs';
 
 import {
   ENGLISH_FLAG,
@@ -32,12 +31,19 @@ const ChatBlock: React.FC<ChatBlockProps> = ({ topic, category, language }) => {
     itemsLang.find((item) => item.id === language)?.name || '';
   const flagImage = FLAGS[languageName] || null;
 
-  const { isExpanded } = useSelector((state: RootState) => state.size);
+  const categoryName =
+    itemsCategories.find((item) => item.id === category)?.name || 'Other';
 
   return (
-    <div style={{ width: isExpanded ? '385px' : '421px' }}>
+    <div>
       <div style={styles.chatBlock}>
-        <div style={styles.header}>{category}</div>
+        <div style={styles.header}>
+          <p>{categoryName}</p>
+
+          <div style={styles.dots}>
+            <BsThreeDotsVertical color="#979DED" size={20} />
+          </div>
+        </div>
 
         <div style={styles.blockContent}>
           <h4 style={styles.title}>{topic}</h4>
@@ -58,12 +64,19 @@ const ChatBlock: React.FC<ChatBlockProps> = ({ topic, category, language }) => {
 const styles = {
   chatBlock: {
     height: '240px',
-
     display: 'flex',
     flexDirection: 'column' as 'column',
     backgroundColor: '#313338',
+    borderRadius: '4px',
+  },
+  dots: {
+    display: 'flex',
+    alignItems: 'center',
+    cursor: 'pointer',
   },
   header: {
+    display: 'flex',
+    justifyContent: 'space-between',
     height: '40px',
     width: '100%',
     padding: '4px 12px',
@@ -71,7 +84,7 @@ const styles = {
     lineHeight: '30px',
     color: '#fff',
 
-    background: 'linear-gradient(90deg, #2C3FE1 0%, #66166D 100%)',
+    background: 'linear-gradient(90deg, #66166D 0%,#2C3FE1  100%)',
   },
   blockContent: {
     height: '100%',

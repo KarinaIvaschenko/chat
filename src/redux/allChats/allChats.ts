@@ -12,10 +12,14 @@ interface Chat {
 
 interface ChatState {
   allChats: Chat[];
+  searchingChats: Chat[];
+  searchText: string;
 }
 
 const initialState: ChatState = {
   allChats: [],
+  searchingChats: [],
+  searchText: '',
 };
 
 const chatSlice = createSlice({
@@ -25,9 +29,19 @@ const chatSlice = createSlice({
     setAllChats: (state, action) => {
       state.allChats = action.payload;
     },
+    setFilteredChats: (state, action) => {
+      state.searchingChats = action.payload;
+    },
+    setSearchText: (state, action) => {
+      state.searchText = action.payload;
+    },
+    clearSearchText: (state) => {
+      state.searchText = '';
+    },
   },
 });
 
-export const { setAllChats } = chatSlice.actions;
+export const { setAllChats, setFilteredChats, setSearchText, clearSearchText } =
+  chatSlice.actions;
 
 export default chatSlice.reducer;

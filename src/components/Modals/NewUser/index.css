@@ -1,0 +1,93 @@
+/* modal container styles */
+.new-modal-container {
+    width: 640px;
+    height: 440px;
+    margin: auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 20%;
+    display: flex;
+    color: #fff;
+    background-color: #313338;
+}
+
+/* page 1 modal greeting */
+.new-modal-greeting {
+    position: relative;
+    padding: 40px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.new-modal-title {
+    font-size: 30px;
+    font-weight: 600;
+}
+.new-modal-subtitle {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    margin-top: 24px;
+}
+
+/* page 2 modal language */
+.new-modal-language {
+    position: relative;
+    padding: 40px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
+/* page 3 modal categories */
+.new-modal-categories {
+    position: relative;
+    padding: 40px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.new-modal-categories-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.new-modal-option-modal {
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    padding: 4px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    border: 1px solid #FFF;
+    cursor: pointer;
+    transition: 0.5s ease;
+}
+
+.new-modal-option-modal.actived {
+    background-color: #2C3FE1;
+    border-color: #2C3FE1;
+}
+/* pages button */
+.new-modal-button-container {
+    color: #FFF;
+    border-radius: 4px;
+    background-color: #2C3FE1;
+    width: 400px;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+    fill: #FFF;
+}
+.new-modal-button-arrow {
+    width: 16px;
+    height: 14px;
+    background: url('../../../assets/images/arrowForward.svg');
+}

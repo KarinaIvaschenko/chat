@@ -5,7 +5,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import axios from 'axios';
 
 import { setUser } from '../../../redux/user/slice';
-import { openWelcome } from '../../../redux/modals/slice';
+import { openNewUserModal } from '../../../redux/modals/slice';
 
 interface FormValues {
   name: string;
@@ -127,7 +127,7 @@ const SignupForm: React.FC<SignupBlockProps> = ({
         setLoadingModal(false);
         setVerifyModal(true);
         dispatch(setUser({ name, email: login, token: token }));
-        dispatch(openWelcome());
+        dispatch(openNewUserModal());
       } else {
         throw new Error('Failed to sign up');
       }

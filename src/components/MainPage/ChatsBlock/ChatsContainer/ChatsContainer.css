@@ -1,0 +1,40 @@
+.chats-container {
+  margin-top: 51px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(362px, 1fr));
+  gap: 30px;
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.bottom-buttons {
+  display: block;
+}
+
+.show-more-container {
+  margin-top: 19px;
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+  cursor: pointer;
+}
+
+.show-more-button {
+  color: #bbbbbb;
+  font-size: 16px;
+}
+
+@media (max-width: 1440px) {
+  .chats-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 960px) {
+  .chats-container {
+    grid-template-columns: 1fr;
+  }
+}

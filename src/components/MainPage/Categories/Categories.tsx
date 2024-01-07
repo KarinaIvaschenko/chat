@@ -1,54 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-
-import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { RootState } from '../../../redux/store';
-import { setCategories } from '../../../redux/categories/slice';
+import { setActiveCategory } from '../../../redux/filters/slice';
+
 const Categories = () => {
   const dispatch = useDispatch();
 
-  const { token } = useSelector((state: RootState) => state.user);
-  const categoriesState = useSelector((state: RootState) => state.categories);
+  const categories = useSelector(
+    (state: RootState) => state.categories.categories,
+  );
+  const { activeCategory } = useSelector((state: RootState) => state.filters);
 
-  const [activeCategory, setActiveCategory] = useState(0);
-
-  useEffect(() => {
-    const getCategories = async () => {
-      try {
-        const baseUrl = process.env.REACT_APP_API_URL;
-        const endpoint = 'api/v1/chat-category';
-        const url = `${baseUrl}/${endpoint}`;
-        const headers = {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        };
-
-        const response = await axios.get(url, { headers });
-        const data = response.data.data;
-
-        dispatch(setCategories(data));
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    getCategories();
-  }, []);
+  const handleActiveCategory = (id: string) => {
+    dispatch(setActiveCategory(id));
+  };
 
   return (
     <div style={styles.categories}>
       <h2 style={styles.title}>Choose category:</h2>
 
       <div style={styles.itemsBlock}>
-        {categoriesState.categories.map((item, index) => (
+        {categories.map((item, index) => (
           <li
             className={`category-item ${
-              activeCategory === index ? 'category-item-active' : ''
+              activeCategory === item.id ? 'category-item-active' : ''
             }`}
-            onClick={() => setActiveCategory(index)}
-            key={item.id}
-          >
+            onClick={() => handleActiveCategory(item.id)}
+            key={item.id}>
             {item.name}
           </li>
         ))}
