@@ -36,7 +36,8 @@ const SignupBlock: React.FC<SignupBlockProps> = ({
   const closeModal = () => {
     setSignModal(false);
   };
-
+  
+  const pisya = 69;
   const handleVerifyModal = async () => {
     setVerifyModal(true);
 

@@ -83,6 +83,7 @@ const SignupForm: React.FC<SignupBlockProps> = ({
     return errors;
   };
 
+
   const handleSubmit = async (
     values: FormValues,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
@@ -101,6 +102,9 @@ const SignupForm: React.FC<SignupBlockProps> = ({
           email: values.email,
           password: values.password,
           passwordConfirm: values.password,
+          "roles": [
+            "USER"
+          ]
         },
         { headers }
       );
