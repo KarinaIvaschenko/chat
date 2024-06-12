@@ -6,6 +6,7 @@ import Welcome from './Modals/Welcome';
 import ChatsContainer from './MainPage/ChatsBlock/ChatsContainer/ChatsContainer';
 import SearchBlock from './MainPage/SearchBlock/SearchBlock';
 import AllFilters from './MainPage/Filters/AllFilters';
+import SettingsList from './SettingsPage/SettingsList/SettingsList';
 
 export {
   GreetModals,
@@ -16,4 +17,5 @@ export {
   ChatsContainer,
   SearchBlock,
   AllFilters,
+  SettingsList,
 };
